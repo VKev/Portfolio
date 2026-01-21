@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ArrowRight, User, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations, type Language } from '../constants/translations';
 import tempusia1 from '../assets/tempusia1.webp';
@@ -252,9 +253,10 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
     }, [images, isOpen]);
 
     if (!isOpen) return null;
+    if (typeof document === 'undefined') return null;
 
-    return (
-        <div className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4">
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4">
             <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-gray-300 z-50">
                 <X size={32} />
             </button>
@@ -288,7 +290,8 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
                     />
                 ))}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
@@ -393,7 +396,7 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-12">
                 <div>
-                    <h2 className="text-xl font-bold tracking-tighter uppercase dark:text-white transition-colors bg-black text-white dark:bg-white dark:text-black px-2 inline-block mb-1">
+                    <h2 className="text-xl font-bold tracking-tighter uppercase transition-colors bg-black text-white dark:bg-white dark:text-black px-2 inline-block mb-1">
                         {t.header}
                     </h2>
                     <div className="text-xs text-gray-500 font-mono">{t.subheader}</div>
