@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ArrowRight, User, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { translations, type Language } from '../constants/translations';
 import tempusia1 from '../assets/tempusia1.webp';
@@ -22,6 +23,10 @@ import shadercode3 from '../assets/shadercode3.webp';
 import shadercode4 from '../assets/shadercode4.webp';
 import shadercode5 from '../assets/shadercode5.webp';
 
+const LIGHTBOX_CACHE_KEY = 'unity-lightbox-cache-v1';
+const MAX_CACHE_ENTRIES = 15;
+const MAX_CACHE_ITEM_BYTES = 800 * 1024; // keep entries modest to avoid localStorage overflow
+
 interface UnitySectionProps {
     lang?: Language;
 }
@@ -40,6 +45,69 @@ interface Project {
     role?: string;
     gallery?: string[];
 }
+
+type CacheEntry = {
+    dataUrl: string;
+    size: number;
+    ts: number;
+};
+
+const readCache = (): Record<string, CacheEntry> => {
+    if (typeof window === 'undefined') return {};
+    try {
+        const raw = window.localStorage.getItem(LIGHTBOX_CACHE_KEY);
+        return raw ? JSON.parse(raw) : {};
+    } catch (error) {
+        console.warn('Lightbox cache read failed', error);
+        return {};
+    }
+};
+
+const writeCache = (cache: Record<string, CacheEntry>) => {
+    if (typeof window === 'undefined') return;
+    try {
+        const entries = Object.entries(cache).sort((a, b) => b[1].ts - a[1].ts);
+        const trimmed = Object.fromEntries(entries.slice(0, MAX_CACHE_ENTRIES));
+        window.localStorage.setItem(LIGHTBOX_CACHE_KEY, JSON.stringify(trimmed));
+    } catch (error) {
+        console.warn('Lightbox cache write failed', error);
+    }
+};
+
+const blobToDataUrl = (blob: Blob): Promise<string> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+
+const resolveCachedSrc = async (
+    src: string,
+    cache: Record<string, CacheEntry>
+): Promise<{ updatedCache: Record<string, CacheEntry>; resolvedSrc: string }> => {
+    if (cache[src]) {
+        return { updatedCache: cache, resolvedSrc: cache[src].dataUrl };
+    }
+
+    try {
+        const response = await fetch(src, { cache: 'force-cache' });
+        const blob = await response.blob();
+        if (blob.size > MAX_CACHE_ITEM_BYTES) {
+            return { updatedCache: cache, resolvedSrc: src };
+        }
+        const dataUrl = await blobToDataUrl(blob);
+        const nextCache = {
+            ...cache,
+            [src]: { dataUrl, size: blob.size, ts: Date.now() },
+        };
+        writeCache(nextCache);
+        return { updatedCache: nextCache, resolvedSrc: dataUrl };
+    } catch (error) {
+        console.warn('Image cache fetch failed', error);
+        return { updatedCache: cache, resolvedSrc: src };
+    }
+};
 
 // Static data structure for props that don't need translation
 const staticProjectData: Project[] = [
@@ -95,8 +163,6 @@ const staticProjectData: Project[] = [
     }
 ];
 
-import { useState, useEffect } from 'react';
-
 const ProjectTags = ({ tags }: { tags: string[] }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const displayedTags = isExpanded ? tags : tags.slice(0, 4);
@@ -127,6 +193,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
 
 const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () => void, isOpen: boolean }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [resolvedImages, setResolvedImages] = useState<string[]>(images);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -146,6 +213,44 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
         };
     }, [isOpen, onClose, images.length]);
 
+    useEffect(() => {
+        // Reset index when a new gallery opens to avoid stale index pointing past array bounds
+        if (isOpen) {
+            setCurrentIndex(0);
+        }
+    }, [images, isOpen]);
+
+    useEffect(() => {
+        let mounted = true;
+
+        if (!isOpen || images.length === 0) {
+            setResolvedImages(images);
+            return () => {
+                mounted = false;
+            };
+        }
+
+        const hydrate = async () => {
+            let cache = readCache();
+            const results: string[] = [];
+            for (const src of images) {
+                // eslint-disable-next-line no-await-in-loop
+                const { updatedCache, resolvedSrc } = await resolveCachedSrc(src, cache);
+                cache = updatedCache;
+                results.push(resolvedSrc);
+            }
+            if (mounted) {
+                setResolvedImages(results);
+            }
+        };
+
+        hydrate();
+
+        return () => {
+            mounted = false;
+        };
+    }, [images, isOpen]);
+
     if (!isOpen) return null;
 
     return (
@@ -162,7 +267,7 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
             </button>
 
             <img
-                src={images[currentIndex]}
+                src={resolvedImages[currentIndex] || images[currentIndex]}
                 alt={`Slide ${currentIndex + 1}`}
                 className="max-w-full max-h-[90vh] object-contain select-none"
             />
