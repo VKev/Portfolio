@@ -188,7 +188,7 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
 };
 
 // Helper component
-const ProjectCard = ({ project, index, t, openLightbox, isReversed }: { project: Project, index: number, t: any, openLightbox: (g: string[]) => void, isReversed: boolean }) => {
+const ProjectCard = ({ project, t, openLightbox, isReversed }: { project: Project, t: any, openLightbox: (g: string[]) => void, isReversed: boolean }) => {
     return (
         <div className="relative flex flex-col md:flex-row gap-8 mb-12">
             <div className="md:w-[110px] flex-shrink-0 flex md:flex-col md:items-end justify-start md:pt-8 relative pl-6 md:pl-0 z-10">
@@ -316,7 +316,6 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
-                                    index={index}
                                     t={t}
                                     openLightbox={openLightbox}
                                     isReversed={index % 2 === 0}
@@ -341,7 +340,6 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
-                                    index={index}
                                     t={t}
                                     openLightbox={openLightbox}
                                     isReversed={index % 2 !== 0}
