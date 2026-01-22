@@ -224,8 +224,10 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
     useEffect(() => {
         let mounted = true;
 
+        // Reset to initial images immediately to avoid showing stale images from previous gallery
+        setResolvedImages(images);
+
         if (!isOpen || images.length === 0) {
-            setResolvedImages(images);
             return () => {
                 mounted = false;
             };
@@ -308,7 +310,10 @@ const ProjectCard = ({ project, t, openLightbox, isReversed }: { project: Projec
             </div>
 
             <div className="flex-1">
-                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition-all duration-300 group">
+                <div
+                    className="bg-white/10 dark:bg-black/10 border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition-all duration-300 group"
+                    style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+                >
                     <div className={`flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
                         <div
                             className={`w-full md:w-2/5 aspect-video md:aspect-auto relative overflow-hidden bg-gray-100 dark:bg-gray-900 ${isReversed ? 'md:border-l' : 'md:border-r'} border-b md:border-b-0 border-gray-100 dark:border-gray-800 cursor-pointer`}
@@ -388,8 +393,12 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
     return (
         <div className="h-full">
             <Lightbox
+                key={currentGallery && currentGallery.length > 0 ? currentGallery[0] : 'empty'}
                 isOpen={lightboxOpen}
-                onClose={() => setLightboxOpen(false)}
+                onClose={() => {
+                    setLightboxOpen(false);
+                    setCurrentGallery([]);
+                }}
                 images={currentGallery}
             />
 
