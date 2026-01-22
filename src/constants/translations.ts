@@ -94,7 +94,7 @@ export const translations = {
                 },
                 {
                     id: 'story-game',
-                    title: 'Story Game PhongBac',
+                    title: 'Story Game "PhongBat"',
                     desc: 'A story game built in URP Unity, where player choices affect the ending. Inspired by "Pho Anh Hai". A personal project made in two weeks.',
                     role: 'Personal Project'
                 },

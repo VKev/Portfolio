@@ -2,20 +2,49 @@ import { Award, Circle, ArrowRight, Globe, ChevronDown, Trophy } from 'lucide-re
 import { translations, type Language } from '../constants/translations';
 import { useState } from 'react';
 
+const cvFileModules = import.meta.glob('../assets/cvs/*', {
+    eager: true,
+    import: 'default'
+}) as Record<string, string>;
+
+const cvFiles = Object.entries(cvFileModules)
+    .map(([path, url]) => {
+        const fileName = path.split('/').pop() ?? 'CV';
+        return { fileName, url };
+    })
+    .sort((a, b) => a.fileName.localeCompare(b.fileName));
+
 interface MainContentProps {
     lang?: Language;
 }
 
 const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
     const t = translations[lang].home;
+    const nav = translations[lang].nav;
     const [isExpanded, setIsExpanded] = useState(true);
+    const [isCvMenuOpen, setIsCvMenuOpen] = useState(false);
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+    const actionButtonClass = 'px-4 py-2 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-xs font-bold uppercase tracking-wider backdrop-blur-md dark:text-gray-200 transition-colors hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black';
+    const menuContainerClass = 'absolute left-0 mt-2 min-w-[220px] border border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-black/90 shadow-lg backdrop-blur-md z-20';
+    const menuItemClass = 'block px-4 py-2 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors';
+
+    const toggleCvMenu = () => {
+        setIsCvMenuOpen(prev => !prev);
+        setIsProfileMenuOpen(false);
+    };
+
+    const toggleProfileMenu = () => {
+        setIsProfileMenuOpen(prev => !prev);
+        setIsCvMenuOpen(false);
+    };
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
             {/* Left Column: Intro + Hobbies */}
             <div className="lg:col-span-2 flex flex-col gap-8">
                 {/* Intro Section */}
-                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-12 relative group hover:shadow-lg transition-all duration-300">
+                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-12 relative z-30 group hover:shadow-lg transition-all duration-300">
                     <div className="text-sm font-mono mb-4 text-gray-500 dark:text-gray-400">
                         {t.intro.init}
                     </div>
@@ -29,12 +58,62 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
                         {t.intro.desc}
                     </p>
                     <div className="flex gap-4">
-                        <a href="#" className="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-xs font-bold uppercase tracking-wider backdrop-blur-md dark:text-gray-200 transition-colors hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black">
-                            {t.intro.badge1}
-                        </a>
-                        <a href="#" className="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-xs font-bold uppercase tracking-wider backdrop-blur-md dark:text-gray-200 transition-colors hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black">
-                            {t.intro.badge2}
-                        </a>
+                        <div className="relative">
+                            <button
+                                type="button"
+                                className={actionButtonClass}
+                                onClick={toggleCvMenu}
+                                aria-expanded={isCvMenuOpen}
+                                aria-haspopup="menu"
+                            >
+                                {t.intro.badge1}
+                            </button>
+                            {isCvMenuOpen && (
+                                <div className={menuContainerClass} role="menu">
+                                    {cvFiles.length === 0 ? (
+                                        <div className="px-4 py-2 text-xs font-mono text-gray-400 dark:text-gray-500">
+                                            NO_CVS_FOUND
+                                        </div>
+                                    ) : (
+                                        cvFiles.map((file) => (
+                                            <a
+                                                key={file.url}
+                                                href={file.url}
+                                                download={file.fileName}
+                                                className={menuItemClass}
+                                                onClick={() => setIsCvMenuOpen(false)}
+                                            >
+                                                {file.fileName}
+                                            </a>
+                                        ))
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                        <div className="relative">
+                            <button
+                                type="button"
+                                className={actionButtonClass}
+                                onClick={toggleProfileMenu}
+                                aria-expanded={isProfileMenuOpen}
+                                aria-haspopup="menu"
+                            >
+                                {t.intro.badge2}
+                            </button>
+                            {isProfileMenuOpen && (
+                                <div className={menuContainerClass} role="menu">
+                                    <a href="#unity" className={menuItemClass} onClick={() => setIsProfileMenuOpen(false)}>
+                                        {nav.unity}
+                                    </a>
+                                    <a href="#ai" className={menuItemClass} onClick={() => setIsProfileMenuOpen(false)}>
+                                        {nav.ai}
+                                    </a>
+                                    <a href="#software" className={menuItemClass} onClick={() => setIsProfileMenuOpen(false)}>
+                                        {nav.software}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 

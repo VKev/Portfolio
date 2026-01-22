@@ -138,7 +138,7 @@ const staticProjectData: Project[] = [
         quarter: 'Q3',
         year: '2024',
         image: battleground1,
-        link: '#',
+        link: 'https://github.com/VKev/Unity-Block-Arena-Battle',
         tags: ['Netcode', 'Particle System', 'VFX Graph', 'GPU Instancing', 'Terrain', 'State Machines'],
         gallery: [battleground1, battleground2]
     },
