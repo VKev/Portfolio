@@ -326,8 +326,8 @@ const ProjectCard = ({
 
             <div className="flex-1">
                 <div
-                    className="bg-white/10 dark:bg-black/10 border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition-all duration-300 group"
-                    style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
+                    className="bg-white/10 dark:bg-black/10 border border-gray-200 dark:border-gray-800 hover:border-black dark:hover:border-white transition-all duration-300 group overflow-hidden backdrop-blur-[8px] backdrop-saturate-150 shadow-[0_18px_45px_rgba(0,0,0,0.08)]"
+                    style={{ backdropFilter: 'blur(12px) saturate(150%)', WebkitBackdropFilter: 'blur(12px) saturate(150%)' }}
                 >
                     <div className={`flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
                         <div

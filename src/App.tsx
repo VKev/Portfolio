@@ -10,6 +10,44 @@ import type { Language } from './constants/translations';
 type ViewState = 'home' | 'unity' | 'ai' | 'software';
 type Theme = 'light' | 'dark';
 
+const VIEW_COUNTER_BASE_URL = 'https://view-counter.vmktither.workers.dev';
+const VIEW_COUNTER_NAMESPACE = import.meta.env.VITE_VIEW_NAMESPACE ?? 'vkev-portfolio';
+const VIEW_COUNTER_STORAGE_PREFIX = 'view-count';
+
+type StoredViewCount = {
+  count: number;
+  counted: boolean;
+  ts: number;
+};
+
+const buildViewCountKey = (page: string) =>
+  `${VIEW_COUNTER_STORAGE_PREFIX}:${VIEW_COUNTER_NAMESPACE}:${page}`;
+
+const readStoredViewCount = (page: string): number | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(buildViewCountKey(page));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as StoredViewCount;
+    if (typeof parsed.count === 'number' && parsed.counted) {
+      return parsed.count;
+    }
+  } catch (error) {
+    console.warn('View count cache read failed', error);
+  }
+  return null;
+};
+
+const storeViewCount = (page: string, count: number) => {
+  if (typeof window === 'undefined') return;
+  try {
+    const payload: StoredViewCount = { count, counted: true, ts: Date.now() };
+    window.localStorage.setItem(buildViewCountKey(page), JSON.stringify(payload));
+  } catch (error) {
+    console.warn('View count cache write failed', error);
+  }
+};
+
 function App() {
   // Initialize state from hash or default to 'home'
   const [currentView, setCurrentView] = useState<ViewState>(() => {
@@ -22,6 +60,12 @@ function App() {
 
   const [theme, setTheme] = useState<Theme>('light');
   const [lang, setLang] = useState<Language>('en');
+  const [viewCounts, setViewCounts] = useState<Record<ViewState, number | null>>({
+    home: null,
+    unity: null,
+    ai: null,
+    software: null,
+  });
 
   // Sync hash with currentView
   useEffect(() => {
@@ -54,6 +98,46 @@ function App() {
     }
   }, [theme]);
 
+  useEffect(() => {
+    const page = currentView === 'home' ? 'home' : currentView;
+    if (viewCounts[currentView] !== null) return;
+
+    const cachedCount = readStoredViewCount(page);
+    if (cachedCount !== null) {
+      setViewCounts(prev => ({ ...prev, [currentView]: cachedCount }));
+      return;
+    }
+
+    const controller = new AbortController();
+    const url = `${VIEW_COUNTER_BASE_URL}/hit?namespace=${encodeURIComponent(
+      VIEW_COUNTER_NAMESPACE
+    )}&page=${encodeURIComponent(page)}`;
+
+    const fetchCount = async () => {
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`View count failed: ${response.status}`);
+        }
+        const data = (await response.json()) as { count?: number };
+        if (typeof data.count === 'number') {
+          setViewCounts(prev => ({ ...prev, [currentView]: data.count }));
+          storeViewCount(page, data.count);
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.warn('View count request failed', error);
+        }
+      }
+    };
+
+    fetchCount();
+
+    return () => {
+      controller.abort();
+    };
+  }, [currentView, viewCounts]);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
@@ -61,6 +145,11 @@ function App() {
   const toggleLang = () => {
     setLang(prev => prev === 'en' ? 'vi' : 'en');
   };
+
+  const currentViewCount = viewCounts[currentView];
+  const viewCountLabel = typeof currentViewCount === 'number'
+    ? currentViewCount.toLocaleString()
+    : '---';
 
   return (
     <div className="min-h-screen text-black dark:text-white font-mono selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black p-4 md:p-12 relative overflow-hidden transition-colors duration-300">
@@ -81,6 +170,8 @@ function App() {
           <span className="hidden sm:inline">SYS.ID: 8492</span>
           <span className="hidden sm:inline">|</span>
           <span className="hidden sm:inline">Bio_Metrics: Normal</span>
+          <span className="hidden sm:inline">|</span>
+          <span className="hidden sm:inline">Views: {viewCountLabel}</span>
           <div className="hidden md:block animate-pulse ml-4">
             /// ACCESSING_DATABASE: {currentView.toUpperCase()}
           </div>
