@@ -44,7 +44,9 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
             {/* Left Column: Intro + Hobbies */}
             <div className="lg:col-span-2 flex flex-col gap-8">
                 {/* Intro Section */}
-                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-12 relative z-30 group hover:shadow-lg transition-all duration-300">
+                <div
+                    className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-12 relative z-30 group hover:shadow-lg transition-all duration-300 animate-fade-in [animation-fill-mode:both]"
+                >
                     <div className="text-sm font-mono mb-4 text-gray-500 dark:text-gray-400">
                         {t.intro.init}
                     </div>
@@ -122,7 +124,13 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Hobby 1 */}
                         {/* Hobby 1 */}
-                        <a href="https://www.linkedin.com/in/khang-huynh-aa766b37b/details/certifications/" target="_blank" rel="noopener noreferrer" className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group block">
+                        <a
+                            href="https://www.linkedin.com/in/khang-huynh-aa766b37b/details/certifications/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group block animate-slide-up [animation-fill-mode:both]"
+                            style={{ animationDelay: '120ms' }}
+                        >
                             <div className="flex justify-between items-start mb-12">
                                 <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">{t.hobbies.h1_label}</span>
                                 <Award className="text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
@@ -135,7 +143,10 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
                         </a>
 
                         {/* Hobby 2 */}
-                        <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group">
+                        <div
+                            className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group animate-slide-up [animation-fill-mode:both]"
+                            style={{ animationDelay: '180ms' }}
+                        >
                             <div className="flex justify-between items-start mb-12">
                                 <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">{t.hobbies.h2_label}</span>
                                 <Globe className="text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
@@ -147,7 +158,8 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
 
                     {/* Hobby 3 - Full Width - Dropdown */}
                     <div
-                        className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group cursor-pointer"
+                        className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group cursor-pointer animate-slide-up [animation-fill-mode:both]"
+                        style={{ animationDelay: '240ms' }}
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
                         <div className="flex justify-between items-start mb-4">
@@ -178,7 +190,10 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
             <div className="lg:col-span-1 flex flex-col gap-8">
                 {/* Tech Stack */}
                 {/* Tech Stack */}
-                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-8 shadow-sm transition-colors">
+                <div
+                    className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-8 shadow-sm transition-colors animate-slide-up [animation-fill-mode:both]"
+                    style={{ animationDelay: '160ms' }}
+                >
                     <div className="mb-6 dark:text-white transition-colors">
                         <h3 className="font-bold uppercase tracking-wider">{t.tech}</h3>
                     </div>
@@ -195,7 +210,10 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
 
 
                 {/* Experience Log */}
-                <div className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-8 flex-1 transition-colors">
+                <div
+                    className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-8 flex-1 transition-colors animate-slide-up [animation-fill-mode:both]"
+                    style={{ animationDelay: '220ms' }}
+                >
                     <div className="flex justify-between items-center mb-8 dark:text-white transition-colors">
                         <h3 className="font-bold uppercase tracking-wider">{t.exp}</h3>
                         <div className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse transition-colors" />

@@ -117,6 +117,98 @@ export const translations = {
                     role: 'Personal Project'
                 }
             ]
+        },
+        ai: {
+            header: 'AI ENGINEER',
+            subheader: 'v.2.0 // RESEARCH_PROFILE',
+            badges: ['COMPUTER_VISION', 'GENERATIVE_AI', 'SPIKING_SYSTEMS'],
+            tagline: 'Deep Learning Researcher',
+            title: 'Research Profile',
+            summary: 'I am a Software Engineer with a passion for Machine Learning, Deep Learning, and Game Development. I love building generative AI models like Diffusion, Flow Matching, and recently MeanFlow.',
+            motto: 'CREATIVE IS THE BEST.',
+            focus_title: 'Research Focus',
+            focus: [
+                {
+                    label: 'Generative Systems',
+                    items: ['Diffusion', 'Flow Matching', 'MeanFlow']
+                },
+                {
+                    label: 'Vision & Biometrics',
+                    items: ['Image Classification', 'Anomaly Detection', 'Palmprint Identification']
+                },
+                {
+                    label: 'Neural Architectures',
+                    items: ['Transformer', 'Mamba', 'Spiking Neural Networks']
+                }
+            ],
+            tech_title: 'Tech_Stack',
+            tech_items: ['PyTorch', 'PyTorch Lightning', 'FastAPI', 'Docker', 'Git', 'CI/CD', 'SSH', 'Linux', 'CUDA', 'ONNX', 'OpenCV', 'Albumentations', 'Hugging Face', 'TensorFlow', 'PostgreSQL', 'MLflow', 'Qdrant', 'n8n', 'ComfyUI', 'Apache Spark', 'Kafka'],
+            tech_groups: [
+                {
+                    label: 'ML Frameworks',
+                    items: ['PyTorch', 'PyTorch Lightning', 'TensorFlow', 'Hugging Face', 'OpenCV', 'Albumentations', 'CUDA', 'ONNX']
+                },
+                {
+                    label: 'MLOps & Infra',
+                    items: ['Docker', 'Git', 'CI/CD', 'Linux', 'SSH', 'MLflow', 'PostgreSQL']
+                },
+                {
+                    label: 'Agents & Workflow',
+                    items: ['FastAPI', 'n8n', 'ComfyUI', 'Qdrant']
+                },
+                {
+                    label: 'Data Streaming',
+                    items: ['Apache Spark', 'Kafka']
+                }
+            ],
+            work_title: 'Work Experience',
+            work: {
+                period: 'May 2024 - Jan 2026',
+                org: 'AIC Laboratory',
+                role: 'Deep Learning Researcher',
+                summary: 'Conducted research in computer vision, focusing on image classification, anomaly detection, spiking neural networks, and biometric identification pipelines.'
+            },
+            papers_title: 'Research Papers',
+            papers_subtitle: 'v.1.0 // PUBLICATIONS',
+            details_contrib_title: 'Abstract',
+            view_more: 'View More',
+            view_less: 'View Less',
+            papers: [
+                {
+                    id: 'SSPS 2025',
+                    period: 'Mar 2025 - Jun 2025',
+                    venue: '7th International Symposium on Signal Processing Systems',
+                    title: 'Enhance an Efficient Contactless Palm Print Recognition System Tailored for University Environment.',
+                    badges: ['Accepted', 'First Author'],
+                    contributions: [
+                        'In university settings, traditional biometric systems requiring physical contact raise hygiene and scalability concerns. Ensuring high accuracy at low cost is challenging due to real-world factors like changing backgrounds, lighting, and movement. To address this, we propose an AI-driven, contactless palm print recognition system that integrates seamlessly with campus infrastructure for secure access. Inspired by deep learning-based depth estimation, we introduce a novel pipeline to remove noisy backgrounds, enhancing accuracy and robustness. A diverse dataset of university staff and students was collected to validate the system, achieving 94.59% identity accuracy, demonstrating its effectiveness in real-world conditions. These results validate the practicality and reliability of our proposed system for identity verification in community settings.'
+                    ],
+                    code_url: 'https://github.com/VKev/Palm-Print-Identification-System'
+                },
+                {
+                    id: 'FETC 2025',
+                    period: 'Jul 2025 - Oct 2025',
+                    venue: '1st FPT International Conference on Emerging Trends in Computing',
+                    title: 'Real-Time Contactless Palm Print Identification System for Uncontrolled and Uncooperative Environments.',
+                    badges: ['Accepted', 'First Author'],
+                    contributions: [
+                        'Biometric identification systems, such as face, fingerprint, and palm print recognition, have become increasingly popular, with contactless modalities like face recognition gaining prominence due to the sensitivity of finger surfaces. However, face recognition is often hindered by high costs and performance degradation from factors like aging or physical exertion. Palm print recognition, on the other hand, offers greater stability over time and distinctiveness across individuals, making it a promising alternative. A key challenge in palm print recognition is achieving reliable performance in uncontrolled environments with dynamic backgrounds, varying lighting, and crowd interference, which complicate region of interest (ROI) extraction. In this paper, we propose a novel, real-time, contactless palm print identification system that is efficient, low-cost, and robust under such conditions. Our system achieves an AUC of 0.9286 and identity accuracy of 95.53% on the Birjand University Mobile Palmprint Database (BMPD), and an AUC of 0.9981 with 99.93% identity accuracy on a small, realistic dataset we collected.'
+                    ],
+                    code_url: 'https://github.com/VKev/Real-Time-Contactless-Palm-Print-Identification-System'
+                },
+                {
+                    id: 'FETC 2025',
+                    period: 'Jul 2025 - Oct 2025',
+                    venue: '1st FPT International Conference on Emerging Trends in Computing',
+                    title: 'Unlocking the Potential of Spike-based Transformer Architecture: Investigating Spiking Neural Models for Classification Task.',
+                    badges: ['Accepted', 'Co-Author'],
+                    contributions: [
+                        'Spiking Neural Networks (SNNs) offer energy-efficient and biologically plausible alternatives to conventional Artificial Neural Networks (ANNs). The Spike-driven Transformer architecture integrates SNN efficiency with Transformer-based feature extraction, achieving competitive results for image classification. However, its reliance on the Leaky Integrate-and-Fire (LIF) neuron introduces computational overhead due to the leak mechanism. This work investigates alternative neuron models - IF Hard Reset and IF Soft Reset - which remove the leak dynamics to improve efficiency. We conduct systematic evaluations on CIFAR-10 and CIFAR-100 datasets, analyzing accuracy, inference speed, spike activity patterns and energy consumption across different neuron models. Experimental results show that IF Soft Reset achieves the highest accuracy at 94.53%, 76.56% compared to 94.44%, 76.15% of Hard Reset and 94.34%, 76.00% of LIF on CIFAR-10, CIFAR-100 respectively. It also achieves the fastest inference speed at 1323.4 FPS and 12.09 ms latency, outperforming IF Hard Reset with 1244.2 FPS and LIF with 1161.2 FPS. The improvement is attributed to its gradual reset behavior, which preserves residual excitation and enhances temporal processing. These findings offer practical design guidelines for deploying efficient spike-based Transformers under resource-constrained environments.'
+                    ],
+                    code_url: 'https://github.com/mintii13/Investigating-Spiking-Neural-Models'
+                }
+            ],
+            code_label: 'Source Code'
         }
     },
     vi: {
@@ -236,7 +328,100 @@ export const translations = {
                     role: 'Dự Án Cá Nhân'
                 }
             ]
+        },
+        ai: {
+            header: 'Kỹ Sư AI',
+            subheader: 'v.2.0 // HỆ SỐ NGHIÊN CỨU',
+            badges: ['COMPUTER_VISION', 'GENERATIVE_AI', 'SPIKING_SYSTEMS'],
+            tagline: 'Nghiên cứu Deep Learning',
+            title: 'Hệ số Nghiên cứu',
+            summary: 'Tôi là Kỹ Sư phần mềm, đam mê Machine Learning, Deep Learning và phát triển game. Tôi thích xây dựng mô hình AI tạo sinh như Diffusion, Flow Matching, và gần đây là MeanFlow.',
+            motto: 'SÁNG TẠO LÀ TUYỆT NHẤT.',
+            focus_title: 'Hướng_nghiên_cứu',
+            focus: [
+                {
+                    label: 'Hệ thống tạo sinh',
+                    items: ['Diffusion', 'Flow Matching', 'MeanFlow']
+                },
+                {
+                    label: 'Thị giác & sinh trắc',
+                    items: ['Image Classification', 'Anomaly Detection', 'Palmprint Identification']
+                },
+                {
+                    label: 'Kiến trúc thần kinh',
+                    items: ['Transformer', 'Mamba', 'Spiking Neural Networks']
+                }
+            ],
+            tech_title: 'Công nghệ',
+            tech_items: ['PyTorch', 'PyTorch Lightning', 'FastAPI', 'Docker', 'Git', 'CI/CD', 'SSH', 'Linux', 'CUDA', 'ONNX', 'OpenCV', 'Albumentations', 'Hugging Face', 'TensorFlow', 'PostgreSQL', 'MLflow', 'Qdrant', 'n8n', 'ComfyUI', 'Apache Spark', 'Kafka'],
+            tech_groups: [
+                {
+                    label: 'ML Frameworks',
+                    items: ['PyTorch', 'PyTorch Lightning', 'TensorFlow', 'Hugging Face', 'OpenCV', 'Albumentations', 'CUDA', 'ONNX']
+                },
+                {
+                    label: 'MLOps & Infra',
+                    items: ['Docker', 'Git', 'CI/CD', 'Linux', 'SSH', 'MLflow', 'PostgreSQL']
+                },
+                {
+                    label: 'Agents & Workflow',
+                    items: ['FastAPI', 'n8n', 'ComfyUI', 'Qdrant']
+                },
+                {
+                    label: 'Data Streaming',
+                    items: ['Apache Spark', 'Kafka']
+                }
+            ],
+            work_title: 'Kinh nghiệm',
+            work: {
+                period: 'May 2024 - Jan 2026',
+                org: 'AIC Laboratory',
+                role: 'Deep Learning Researcher',
+                summary: 'Conducted research in computer vision, focusing on image classification, anomaly detection, spiking neural networks, and biometric identification pipelines.'
+            },
+            papers_title: 'Bài_báo',
+            papers_subtitle: 'v.1.0 // CÔNG_BỐ',
+            details_contrib_title: 'Tóm_tắt',
+            view_more: 'Xem_thêm',
+            view_less: 'Thu_gọn',
+            papers: [
+                {
+                    id: 'SSPS 2025',
+                    period: 'Mar 2025 - Jun 2025',
+                    venue: '7th International Symposium on Signal Processing Systems',
+                    title: 'Enhance an Efficient Contactless Palm Print Recognition System Tailored for University Environment.',
+                    badges: ['Accepted', 'First Author'],
+                    contributions: [
+                        'In university settings, traditional biometric systems requiring physical contact raise hygiene and scalability concerns. Ensuring high accuracy at low cost is challenging due to real-world factors like changing backgrounds, lighting, and movement. To address this, we propose an AI-driven, contactless palm print recognition system that integrates seamlessly with campus infrastructure for secure access. Inspired by deep learning-based depth estimation, we introduce a novel pipeline to remove noisy backgrounds, enhancing accuracy and robustness. A diverse dataset of university staff and students was collected to validate the system, achieving 94.59% identity accuracy, demonstrating its effectiveness in real-world conditions. These results validate the practicality and reliability of our proposed system for identity verification in community settings.'
+                    ],
+                    code_url: 'https://github.com/VKev/Palm-Print-Identification-System'
+                },
+                {
+                    id: 'FETC 2025',
+                    period: 'Jul 2025 - Oct 2025',
+                    venue: '1st FPT International Conference on Emerging Trends in Computing',
+                    title: 'Real-Time Contactless Palm Print Identification System for Uncontrolled and Uncooperative Environments.',
+                    badges: ['Accepted', 'First Author'],
+                    contributions: [
+                        'Biometric identification systems, such as face, fingerprint, and palm print recognition, have become increasingly popular, with contactless modalities like face recognition gaining prominence due to the sensitivity of finger surfaces. However, face recognition is often hindered by high costs and performance degradation from factors like aging or physical exertion. Palm print recognition, on the other hand, offers greater stability over time and distinctiveness across individuals, making it a promising alternative. A key challenge in palm print recognition is achieving reliable performance in uncontrolled environments with dynamic backgrounds, varying lighting, and crowd interference, which complicate region of interest (ROI) extraction. In this paper, we propose a novel, real-time, contactless palm print identification system that is efficient, low-cost, and robust under such conditions. Our system achieves an AUC of 0.9286 and identity accuracy of 95.53% on the Birjand University Mobile Palmprint Database (BMPD), and an AUC of 0.9981 with 99.93% identity accuracy on a small, realistic dataset we collected.'
+                    ],
+                    code_url: 'https://github.com/VKev/Real-Time-Contactless-Palm-Print-Identification-System'
+                },
+                {
+                    id: 'FETC 2025',
+                    period: 'Jul 2025 - Oct 2025',
+                    venue: '1st FPT International Conference on Emerging Trends in Computing',
+                    title: 'Unlocking the Potential of Spike-based Transformer Architecture: Investigating Spiking Neural Models for Classification Task.',
+                    badges: ['Accepted', 'Co-Author'],
+                    contributions: [
+                        'Spiking Neural Networks (SNNs) offer energy-efficient and biologically plausible alternatives to conventional Artificial Neural Networks (ANNs). The Spike-driven Transformer architecture integrates SNN efficiency with Transformer-based feature extraction, achieving competitive results for image classification. However, its reliance on the Leaky Integrate-and-Fire (LIF) neuron introduces computational overhead due to the leak mechanism. This work investigates alternative neuron models - IF Hard Reset and IF Soft Reset - which remove the leak dynamics to improve efficiency. We conduct systematic evaluations on CIFAR-10 and CIFAR-100 datasets, analyzing accuracy, inference speed, spike activity patterns and energy consumption across different neuron models. Experimental results show that IF Soft Reset achieves the highest accuracy at 94.53%, 76.56% compared to 94.44%, 76.15% of Hard Reset and 94.34%, 76.00% of LIF on CIFAR-10, CIFAR-100 respectively. It also achieves the fastest inference speed at 1323.4 FPS and 12.09 ms latency, outperforming IF Hard Reset with 1244.2 FPS and LIF with 1161.2 FPS. The improvement is attributed to its gradual reset behavior, which preserves residual excitation and enhances temporal processing. These findings offer practical design guidelines for deploying efficient spike-based Transformers under resource-constrained environments.'
+                    ],
+                    code_url: 'https://github.com/mintii13/Investigating-Spiking-Neural-Models'
+                }
+            ],
+            code_label: 'Source Code'
         }
+
     }
 };
 

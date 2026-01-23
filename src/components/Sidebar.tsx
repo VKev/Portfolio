@@ -10,7 +10,10 @@ const Sidebar: React.FC<SidebarProps> = ({ lang = 'en' }) => {
   const t = translations[lang].sidebar;
 
   return (
-    <div className="h-full flex flex-col p-8 border-r border-gray-200 dark:border-gray-800 bg-white/10 dark:bg-black/10 backdrop-blur-[6px] relative transition-colors duration-300">
+    <div
+      className="h-full flex flex-col p-8 border-r border-gray-200 dark:border-gray-800 bg-white/10 dark:bg-black/10 backdrop-blur-[6px] relative transition-colors duration-300 animate-slide-up [animation-fill-mode:both]"
+      style={{ animationDelay: '80ms' }}
+    >
       <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-black dark:border-white/50 -translate-x-[1px] -translate-y-[1px] transition-colors" />
       <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-black dark:border-white/50 translate-x-[1px] -translate-y-[1px] transition-colors" />
 

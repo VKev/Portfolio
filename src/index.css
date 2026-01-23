@@ -6,6 +6,7 @@
 
   --animate-fade-in: fade-in 0.8s ease-out;
   --animate-slide-up: slide-up 0.8s ease-out;
+  --animate-slide-up-solid: slide-up-solid 0.8s ease-out;
 
   @keyframes fade-in {
     0% {
@@ -26,6 +27,16 @@
     100% {
       transform: translateY(0);
       opacity: 1;
+    }
+  }
+
+  @keyframes slide-up-solid {
+    0% {
+      transform: translateY(20px);
+    }
+
+    100% {
+      transform: translateY(0);
     }
   }
 }

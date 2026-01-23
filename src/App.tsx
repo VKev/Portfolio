@@ -4,6 +4,7 @@ import MainContent from './components/MainContent';
 import Background from './components/Background';
 import Navbar from './components/Navbar';
 import UnitySection from './components/UnitySection';
+import AISection from './components/AISection';
 import type { Language } from './constants/translations';
 
 type ViewState = 'home' | 'unity' | 'ai' | 'software';
@@ -102,8 +103,9 @@ function App() {
         )}
 
         {currentView === 'unity' && <UnitySection lang={lang} />}
+        {currentView === 'ai' && <AISection lang={lang} />}
 
-        {currentView !== 'home' && currentView !== 'unity' && (
+        {currentView !== 'home' && currentView !== 'unity' && currentView !== 'ai' && (
           <div className="flex flex-col items-center justify-center h-[500px] border border-gray-200 dark:border-gray-800 bg-white/10 dark:bg-black/10 backdrop-blur-[6px] p-12 transition-colors">
             <div className="text-4xl font-bold mb-4 uppercase tracking-tighter">
               {currentView.replace('-', ' ')}

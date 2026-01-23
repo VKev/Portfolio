@@ -298,9 +298,24 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
 };
 
 // Helper component
-const ProjectCard = ({ project, t, openLightbox, isReversed }: { project: Project, t: any, openLightbox: (g: string[]) => void, isReversed: boolean }) => {
+const ProjectCard = ({
+    project,
+    t,
+    openLightbox,
+    isReversed,
+    delayMs = 0
+}: {
+    project: Project,
+    t: any,
+    openLightbox: (g: string[]) => void,
+    isReversed: boolean,
+    delayMs?: number
+}) => {
     return (
-        <div className="relative flex flex-col md:flex-row gap-8 mb-12">
+        <div
+            className="relative flex flex-col md:flex-row gap-8 mb-12 animate-slide-up-solid"
+            style={{ animationDelay: `${delayMs}ms`, animationFillMode: 'both' }}
+        >
             <div className="md:w-[110px] flex-shrink-0 flex md:flex-col md:items-end justify-start md:pt-8 relative pl-6 md:pl-0 z-10">
                 <div className="absolute left-[3px] md:left-auto md:right-[-5px] top-[5px] md:top-[38px] w-[11px] h-[11px] rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 z-10 box-border" />
                 <div className="text-xs font-bold text-gray-400 dark:text-gray-500 text-right pr-4 md:pr-6">
@@ -403,7 +418,7 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
             />
 
             {/* Header */}
-            <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center justify-between mb-12 animate-fade-in [animation-fill-mode:both]">
                 <div>
                     <h2 className="text-xl font-bold tracking-tighter uppercase transition-colors bg-black text-white dark:bg-white dark:text-black px-2 inline-block mb-1">
                         {t.header}
@@ -436,6 +451,7 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
                                     t={t}
                                     openLightbox={openLightbox}
                                     isReversed={index % 2 === 0}
+                                    delayMs={index * 120}
                                 />
                             ))}
                         </div>
@@ -460,6 +476,7 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
                                     t={t}
                                     openLightbox={openLightbox}
                                     isReversed={index % 2 !== 0}
+                                    delayMs={index * 120}
                                 />
                             ))}
                         </div>
