@@ -740,8 +740,8 @@ function App() {
       )}
 
       {viewsOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-white/20 dark:bg-black/50 p-4 font-mono transition-colors duration-300">
-          <div className="w-[95vw] h-[90vh] max-w-[1400px] border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0a0a0a] relative flex flex-col overflow-hidden shadow-2xl rounded-lg">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-white/20 dark:bg-black/50 p-0 sm:p-4 font-mono transition-colors duration-300">
+          <div className="w-full h-full sm:w-[95vw] sm:h-[90vh] max-w-[1400px] border-0 sm:border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0a0a0a] relative flex flex-col overflow-hidden sm:rounded-lg shadow-2xl">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-md transition-colors">
               <div className="flex items-center gap-4">
@@ -778,7 +778,7 @@ function App() {
 
             <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
               {/* Left Column: Map */}
-              <div className="flex-1 relative border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#050505] transition-colors">
+              <div className="h-[40vh] lg:h-auto lg:flex-1 relative border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#050505] transition-colors order-1 lg:order-none">
                 {/* Map Overlay Elements */}
                 <div className="absolute top-4 left-4 z-10 pointer-events-none">
                   <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Coordinates</div>
@@ -811,7 +811,7 @@ function App() {
               </div>
 
               {/* Right Column: Data Panels */}
-              <div className="w-full lg:w-[400px] flex flex-col bg-gray-50 dark:bg-[#0a0a0a] transition-colors mobile-panel">
+              <div className="flex-1 lg:flex-none w-full lg:w-[400px] flex flex-col bg-gray-50 dark:bg-[#0a0a0a] transition-colors mobile-panel min-h-0 order-2 lg:order-none">
 
                 {/* Panel 1: Selected Node */}
                 <div className="p-6 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-transparent transition-colors">
