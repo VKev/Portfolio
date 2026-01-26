@@ -12,37 +12,34 @@ type Theme = 'light' | 'dark';
 
 const VIEW_COUNTER_BASE_URL = 'https://view-counter.vmktither.workers.dev';
 const VIEW_COUNTER_NAMESPACE = import.meta.env.VITE_VIEW_NAMESPACE ?? 'vkev-portfolio';
-const VIEW_COUNTER_STORAGE_PREFIX = 'view-count';
+const VIEW_COUNTER_STORAGE_PREFIX = 'view-hit';
 
 type StoredViewCount = {
-  count: number;
   counted: boolean;
   ts: number;
 };
 
-const buildViewCountKey = (page: string) =>
+const buildViewHitKey = (page: string) =>
   `${VIEW_COUNTER_STORAGE_PREFIX}:${VIEW_COUNTER_NAMESPACE}:${page}`;
 
-const readStoredViewCount = (page: string): number | null => {
-  if (typeof window === 'undefined') return null;
+const hasStoredHit = (page: string): boolean => {
+  if (typeof window === 'undefined') return false;
   try {
-    const raw = window.localStorage.getItem(buildViewCountKey(page));
+    const raw = window.localStorage.getItem(buildViewHitKey(page));
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredViewCount;
-    if (typeof parsed.count === 'number' && parsed.counted) {
-      return parsed.count;
-    }
+    return Boolean(parsed.counted);
   } catch (error) {
     console.warn('View count cache read failed', error);
   }
-  return null;
+  return false;
 };
 
-const storeViewCount = (page: string, count: number) => {
+const storeHit = (page: string) => {
   if (typeof window === 'undefined') return;
   try {
-    const payload: StoredViewCount = { count, counted: true, ts: Date.now() };
-    window.localStorage.setItem(buildViewCountKey(page), JSON.stringify(payload));
+    const payload: StoredViewCount = { counted: true, ts: Date.now() };
+    window.localStorage.setItem(buildViewHitKey(page), JSON.stringify(payload));
   } catch (error) {
     console.warn('View count cache write failed', error);
   }
@@ -100,29 +97,23 @@ function App() {
 
   useEffect(() => {
     const page = currentView === 'home' ? 'home' : currentView;
-    if (viewCounts[currentView] !== null) return;
-
-    const cachedCount = readStoredViewCount(page);
-    if (cachedCount !== null) {
-      setViewCounts(prev => ({ ...prev, [currentView]: cachedCount }));
-      return;
-    }
-
     const controller = new AbortController();
-    const url = `${VIEW_COUNTER_BASE_URL}/hit?namespace=${encodeURIComponent(
+    const countUrl = `${VIEW_COUNTER_BASE_URL}/count?namespace=${encodeURIComponent(
+      VIEW_COUNTER_NAMESPACE
+    )}&page=${encodeURIComponent(page)}`;
+    const hitUrl = `${VIEW_COUNTER_BASE_URL}/hit?namespace=${encodeURIComponent(
       VIEW_COUNTER_NAMESPACE
     )}&page=${encodeURIComponent(page)}`;
 
     const fetchCount = async () => {
       try {
-        const response = await fetch(url, { signal: controller.signal });
+        const response = await fetch(countUrl, { signal: controller.signal });
         if (!response.ok) {
           throw new Error(`View count failed: ${response.status}`);
         }
         const data = (await response.json()) as { count?: number };
         if (typeof data.count === 'number') {
           setViewCounts(prev => ({ ...prev, [currentView]: data.count }));
-          storeViewCount(page, data.count);
         }
       } catch (error) {
         if (!controller.signal.aborted) {
@@ -131,12 +122,38 @@ function App() {
       }
     };
 
-    fetchCount();
+    const fetchHitThenCount = async () => {
+      try {
+        const response = await fetch(hitUrl, { signal: controller.signal });
+        if (!response.ok) {
+          throw new Error(`View hit failed: ${response.status}`);
+        }
+        const data = (await response.json()) as { count?: number; unique?: boolean };
+        if (data.unique) {
+          storeHit(page);
+        }
+        if (typeof data.count === 'number') {
+          setViewCounts(prev => ({ ...prev, [currentView]: data.count }));
+        }
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.warn('View hit request failed', error);
+        }
+      } finally {
+        await fetchCount();
+      }
+    };
+
+    if (hasStoredHit(page)) {
+      fetchCount();
+    } else {
+      fetchHitThenCount();
+    }
 
     return () => {
       controller.abort();
     };
-  }, [currentView, viewCounts]);
+  }, [currentView]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
