@@ -26,7 +26,7 @@ const hasStoredHit = (page: string): boolean => {
   if (typeof window === 'undefined') return false;
   try {
     const raw = window.localStorage.getItem(buildViewHitKey(page));
-    if (!raw) return null;
+    if (!raw) return false;
     const parsed = JSON.parse(raw) as StoredViewCount;
     return Boolean(parsed.counted);
   } catch (error) {
