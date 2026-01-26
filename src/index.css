@@ -60,6 +60,53 @@ body {
   background: white;
 }
 
+.map-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #475569;
+  border: 2px solid #f8fafc;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.map-marker[data-count] {
+  width: 18px;
+  height: 18px;
+  background: #e2e8f0;
+  color: #0f172a;
+  font-size: 9px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.map-marker[data-count]::after {
+  content: attr(data-count);
+}
+
+.map-marker.is-active {
+  background: #0f172a;
+  transform: scale(1.2);
+}
+
+.dark .map-marker {
+  background: #94a3b8;
+  border-color: #0f172a;
+  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.2);
+}
+
+.dark .map-marker[data-count] {
+  background: #1f2937;
+  color: #e2e8f0;
+  border-color: #0f172a;
+}
+
+.dark .map-marker.is-active {
+  background: #f8fafc;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #ededed;
@@ -70,4 +117,33 @@ body {
 .dark body {
   background: #0a0a0a;
   color: #ededed;
+}
+
+/* Modern Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  /* slate-300 */
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  /* slate-400 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
