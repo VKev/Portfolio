@@ -184,6 +184,7 @@ function App() {
       {/* Top Bar - Simplified since Navbar takes prominence, but keeping metrics */}
       <div className="flex justify-end items-center text-xs tracking-wider text-gray-400 mb-8 uppercase relative z-10">
         <div className="flex items-center gap-4">
+          <span className="sm:hidden">Views: {viewCountLabel}</span>
           <span className="hidden sm:inline">SYS.ID: 8492</span>
           <span className="hidden sm:inline">|</span>
           <span className="hidden sm:inline">Bio_Metrics: Normal</span>
