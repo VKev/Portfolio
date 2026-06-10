@@ -61,6 +61,12 @@ export const translations = {
             exp: 'Experience_Log',
             exp_items: [
                 {
+                    role: 'Game Developer',
+                    company: 'VNG',
+                    desc: 'Currently working as a Game Developer at VNG.',
+                    time: 'June 2026 - Present'
+                },
+                {
                     role: 'AI Researcher',
                     company: 'AIC Laboratory',
                     desc: 'Research on Deep Learning, Machine Learning, Anomaly Detection, and Computer Vision.',
@@ -272,6 +278,12 @@ export const translations = {
             tech: 'Công_Nghệ',
             exp: 'Kinh_Nghiệm',
             exp_items: [
+                {
+                    role: 'Lập trình viên Game',
+                    company: 'VNG',
+                    desc: 'Hiện đang làm Lập trình viên Game tại VNG.',
+                    time: '06/2026 - Hiện tại'
+                },
                 {
                     role: 'Nghiên Cứu Viên AI',
                     company: 'AIC Laboratory',
