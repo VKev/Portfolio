@@ -637,7 +637,7 @@ function App() {
           <span className="hidden sm:inline">|</span>
           <span className="hidden sm:inline">Views: {viewCountLabel}</span>
           <div className="hidden md:block animate-pulse ml-4">
-            /// ACCESSING_DATABASE: {currentView.toUpperCase()}
+            {'/// ACCESSING_DATABASE: '}{currentView.toUpperCase()}
           </div>
         </div>
       </div>
@@ -707,6 +707,7 @@ function App() {
               type="button"
               onClick={() => setLoginOpen(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-black dark:hover:text-white"
+              aria-label="Close login"
             >
               <X size={18} />
             </button>
@@ -714,8 +715,9 @@ function App() {
             <p className="text-xs text-gray-500 mb-4">Enter password to access view logs.</p>
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Password</label>
+                <label htmlFor="admin-password" className="text-[10px] font-bold uppercase tracking-wider text-gray-500">Password</label>
                 <input
+                  id="admin-password"
                   type="password"
                   value={loginPassword}
                   onChange={(event) => setLoginPassword(event.target.value)}

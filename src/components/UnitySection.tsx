@@ -32,6 +32,8 @@ interface UnitySectionProps {
     lang?: Language;
 }
 
+type UnityTranslations = (typeof translations)[Language]['unity'];
+
 interface Project {
     id: string;
     category: 'GAME' | 'COMMUNITY';
@@ -178,6 +180,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
             ))}
             {!isExpanded && hasMore && (
                 <button
+                    type="button"
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -192,7 +195,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
     );
 };
 
-const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () => void, isOpen: boolean }) => {
+const Lightbox = ({ images, onClose }: { images: string[], onClose: () => void }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [resolvedImages, setResolvedImages] = useState<string[]>(images);
 
@@ -203,31 +206,20 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
             if (e.key === 'ArrowRight') setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
         };
 
-        if (isOpen) {
-            window.addEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'hidden';
-        }
+        const previousOverflow = document.body.style.overflow;
+        window.addEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = 'hidden';
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = previousOverflow;
         };
-    }, [isOpen, onClose, images.length]);
-
-    useEffect(() => {
-        // Reset index when a new gallery opens to avoid stale index pointing past array bounds
-        if (isOpen) {
-            setCurrentIndex(0);
-        }
-    }, [images, isOpen]);
+    }, [onClose, images.length]);
 
     useEffect(() => {
         let mounted = true;
 
-        // Reset to initial images immediately to avoid showing stale images from previous gallery
-        setResolvedImages(images);
-
-        if (!isOpen || images.length === 0) {
+        if (images.length === 0) {
             return () => {
                 mounted = false;
             };
@@ -237,7 +229,6 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
             let cache = readCache();
             const results: string[] = [];
             for (const src of images) {
-                // eslint-disable-next-line no-await-in-loop
                 const { updatedCache, resolvedSrc } = await resolveCachedSrc(src, cache);
                 cache = updatedCache;
                 results.push(resolvedSrc);
@@ -252,19 +243,20 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
         return () => {
             mounted = false;
         };
-    }, [images, isOpen]);
+    }, [images]);
 
-    if (!isOpen) return null;
     if (typeof document === 'undefined') return null;
 
     return createPortal(
         <div className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4">
-            <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-gray-300 z-50">
+            <button type="button" onClick={onClose} aria-label="Close gallery" className="absolute top-4 right-4 text-white hover:text-gray-300 z-50">
                 <X size={32} />
             </button>
 
             <button
+                type="button"
                 onClick={() => setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1))}
+                aria-label="Previous image"
                 className="absolute left-4 text-white hover:text-gray-300 z-50 p-2"
             >
                 <ChevronLeft size={48} />
@@ -277,7 +269,9 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
             />
 
             <button
+                type="button"
                 onClick={() => setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1))}
+                aria-label="Next image"
                 className="absolute right-4 text-white hover:text-gray-300 z-50 p-2"
             >
                 <ChevronRight size={48} />
@@ -285,10 +279,12 @@ const Lightbox = ({ images, onClose, isOpen }: { images: string[], onClose: () =
 
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, idx) => (
-                    <div
+                    <button
+                        type="button"
                         key={idx}
                         className={`w-2 h-2 rounded-full ${idx === currentIndex ? 'bg-white' : 'bg-white/30'} cursor-pointer`}
                         onClick={() => setCurrentIndex(idx)}
+                        aria-label={`View image ${idx + 1}`}
                     />
                 ))}
             </div>
@@ -306,7 +302,7 @@ const ProjectCard = ({
     delayMs = 0
 }: {
     project: Project,
-    t: any,
+    t: UnityTranslations,
     openLightbox: (g: string[]) => void,
     isReversed: boolean,
     delayMs?: number
@@ -330,9 +326,11 @@ const ProjectCard = ({
                     style={{ backdropFilter: 'blur(12px) saturate(150%)', WebkitBackdropFilter: 'blur(12px) saturate(150%)' }}
                 >
                     <div className={`flex flex-col ${isReversed ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-                        <div
+                        <button
+                            type="button"
                             className={`w-full md:w-2/5 aspect-video md:aspect-auto relative overflow-hidden bg-gray-100 dark:bg-gray-900 ${isReversed ? 'md:border-l' : 'md:border-r'} border-b md:border-b-0 border-gray-100 dark:border-gray-800 cursor-pointer`}
                             onClick={() => openLightbox(project.gallery || [])}
+                            aria-label={`Open ${project.title ?? 'project'} gallery`}
                         >
                             <img
                                 src={project.image}
@@ -346,7 +344,7 @@ const ProjectCard = ({
                                     </span>
                                 )}
                             </div>
-                        </div>
+                        </button>
 
                         <div className="flex-1 p-6 flex flex-col">
                             <div className="flex justify-between items-start mb-4">
@@ -407,15 +405,16 @@ const UnitySection: React.FC<UnitySectionProps> = ({ lang = 'en' }) => {
 
     return (
         <div className="h-full">
-            <Lightbox
-                key={currentGallery && currentGallery.length > 0 ? currentGallery[0] : 'empty'}
-                isOpen={lightboxOpen}
-                onClose={() => {
-                    setLightboxOpen(false);
-                    setCurrentGallery([]);
-                }}
-                images={currentGallery}
-            />
+            {lightboxOpen && (
+                <Lightbox
+                    key={currentGallery[0]}
+                    onClose={() => {
+                        setLightboxOpen(false);
+                        setCurrentGallery([]);
+                    }}
+                    images={currentGallery}
+                />
+            )}
 
             {/* Header */}
             <div className="flex items-center justify-between mb-12 animate-fade-in [animation-fill-mode:both]">

@@ -4,6 +4,37 @@ interface BackgroundProps {
     theme: 'light' | 'dark';
 }
 
+class Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    size: number;
+
+    constructor(width: number, height: number) {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+    }
+
+    update(width: number, height: number) {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+    }
+
+    draw(ctx: CanvasRenderingContext2D, color: string) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+}
+
 const Background = ({ theme }: BackgroundProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -22,56 +53,24 @@ const Background = ({ theme }: BackgroundProps) => {
         const connectionDistance = 150;
         const mouseDistance = 200;
 
-        let mouse = { x: -1000, y: -1000 };
+        const mouse = { x: -1000, y: -1000 };
 
         // Determine colors based on theme
         const particleColor = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
         const connectionColorBase = theme === 'dark' ? 'rgba(255, 255, 255,' : 'rgba(0, 0, 0,';
 
-        class Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            size: number;
-
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Bounce off edges
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-
-            draw() {
-                if (!ctx) return;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = particleColor;
-                ctx.fill();
-            }
-        }
-
         // Initialize particles
         for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+            particles.push(new Particle(width, height));
         }
 
+        let animationFrameId = 0;
         const animate = () => {
             ctx.clearRect(0, 0, width, height);
 
             particles.forEach(particle => {
-                particle.update();
-                particle.draw();
+                particle.update(width, height);
+                particle.draw(ctx, particleColor);
 
                 // Connect particles
                 particles.forEach(otherParticle => {
@@ -104,7 +103,7 @@ const Background = ({ theme }: BackgroundProps) => {
                 }
             });
 
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         };
 
         animate();
@@ -125,6 +124,7 @@ const Background = ({ theme }: BackgroundProps) => {
         window.addEventListener('mousemove', handleMouseMove);
 
         return () => {
+            cancelAnimationFrame(animationFrameId);
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
         };

@@ -158,22 +158,29 @@ const MainContent: React.FC<MainContentProps> = ({ lang = 'en' }) => {
 
                     {/* Hobby 3 - Full Width - Dropdown */}
                     <div
-                        className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group cursor-pointer animate-slide-up [animation-fill-mode:both]"
+                        className="bg-white/10 dark:bg-black/10 backdrop-blur-[6px] border border-gray-200 dark:border-gray-800 p-6 relative hover:border-black dark:hover:border-white transition-colors group animate-slide-up [animation-fill-mode:both]"
                         style={{ animationDelay: '240ms' }}
-                        onClick={() => setIsExpanded(!isExpanded)}
                     >
-                        <div className="flex justify-between items-start mb-4">
-                            <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">{t.hobbies.h3_label}</span>
-                            <div className="flex gap-4">
-                                <Trophy className="text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                                <ChevronDown className={`text-gray-400 group-hover:text-black dark:group-hover:text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                        <button
+                            type="button"
+                            className="w-full text-left cursor-pointer"
+                            onClick={() => setIsExpanded(prev => !prev)}
+                            aria-expanded={isExpanded}
+                            aria-controls="achievement-links"
+                        >
+                            <div className="flex justify-between items-start mb-4">
+                                <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">{t.hobbies.h3_label}</span>
+                                <div className="flex gap-4">
+                                    <Trophy className="text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                                    <ChevronDown className={`text-gray-400 group-hover:text-black dark:group-hover:text-white transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                                </div>
                             </div>
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 dark:text-white transition-colors">{t.hobbies.h3_title}</h3>
+                            <span className="block text-xl font-bold mb-2 dark:text-white transition-colors">{t.hobbies.h3_title}</span>
+                        </button>
 
-                        <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+                        <div id="achievement-links" className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
                             <ul className="list-disc pl-5 space-y-2">
-                                {(t.hobbies as any).h3_items?.map((item: { text: string, link: string }, idx: number) => (
+                                {t.hobbies.h3_items?.map((item, idx) => (
                                     <li key={idx} className="text-sm text-gray-600 dark:text-gray-400 transition-colors leading-relaxed">
                                         <a href={item.link} target="_blank" rel="noopener noreferrer" className="hover:text-black dark:hover:text-white hover:underline transition-colors">
                                             {item.text}
